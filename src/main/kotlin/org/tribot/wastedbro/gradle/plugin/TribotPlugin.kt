@@ -120,6 +120,12 @@ class TribotPlugin : Plugin<Project> {
         project.tasks.create("copyClassesToBin") { task ->
             task.group = "tribot"
 
+            task.onlyIf {
+                project.tasks
+                    .filter { it.name == "compileJava" || it.name == "compileKotlin" }
+                    .any { it.didWork }
+            }
+
             task.doLast {
 
                 val projectDir = project.projectDir
